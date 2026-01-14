@@ -1,0 +1,102 @@
+.message {
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255,255,255,0.8);
+  padding: 15px 25px;
+  border-radius: 20px;
+  color: #ff3399;
+  font-size: 1.5em;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(255,100,180,0.7);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 9999;
+  animation: none;
+}
+
+@keyframes showMessage {
+  0% { top: -50px; opacity: 0; transform: translateX(-50%) scale(0.8); }
+  50% { top: 150px; opacity: 1; transform: translateX(-50%) scale(1.1); }
+  100% { top: 120px; opacity: 1; transform: translateX(-50%) scale(1); }
+}
+
+<script>
+const yesBtn=document.querySelector('.yes-btn');
+const noBtn=document.querySelector('.no-btn');
+const progress=document.querySelector('.progress');
+const kitty=document.querySelector('.hello-kitty');
+let loveLevel=0;
+
+function createHeart(x,y){
+  const h=document.createElement('div');
+  h.className='heart';
+  h.style.left=x+'px'; h.style.top=y+'px';
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),1500);
+}
+
+function rainHearts(){
+  for(let i=0;i<5;i++){
+    const r=document.createElement('div');
+    r.className='rain-heart';
+    r.style.left=Math.random()*window.innerWidth+'px';
+    document.body.appendChild(r);
+    setTimeout(()=>r.remove(),3000);
+  }
+}
+
+function kittyJump(){
+  kitty.style.transform=`scale(${1+loveLevel*0.05}) translate(${Math.random()*30-15}px,-20px) rotate(${Math.random()*30-15}deg)`;
+  setTimeout(()=>kitty.style.transform=`scale(${1+loveLevel*0.05}) translate(0,0) rotate(0)`,300);
+}
+
+function showMessage(text){
+  const msg = document.createElement('div');
+  msg.className = 'message';
+  msg.textContent = text;
+  document.body.appendChild(msg);
+  msg.style.animation = 'showMessage 1.5s forwards';
+  setTimeout(()=>msg.remove(),3000);
+}
+
+yesBtn.addEventListener('click',(e)=>{
+  loveLevel++;
+  progress.textContent=`❤️ Love Level: ${loveLevel}`;
+  const r=e.target.getBoundingClientRect();
+  createHeart(r.left+20,r.top);
+  createHeart(r.left+60,r.top);
+  kittyJump();
+  rainHearts();
+
+  // الرسائل حسب Love Level مع animation
+  if(loveLevel===10){
+    showMessage("💖 I knew it… you love me forever 😳💍");
+  } else if(loveLevel===15){
+    showMessage("💌 Aji ntzwjo… 🥰");
+  } else if(loveLevel===20){
+    showMessage("💖 Ryhab holi elia lbab… ana jit ntzwjo 😘");
+  } else if(loveLevel===25){
+    showMessage("💘 You are my everything… I love you endlessly 💖");
+  }
+});
+
+noBtn.addEventListener('mouseover',()=>{
+  const x=Math.random()*(window.innerWidth-100);
+  const y=Math.random()*(window.innerHeight-50);
+  noBtn.style.position='absolute';
+  noBtn.style.left=x+'px';
+  noBtn.style.top=y+'px';
+});
+
+setInterval(()=>{
+  const r=document.createElement('div');
+  r.className='rain-heart';
+  r.style.left=Math.random()*window.innerWidth+'px';
+  r.style.top=window.innerHeight+'px';
+  document.body.appendChild(r);
+  setTimeout(()=>r.remove(),3000);
+},900);
+</script>
